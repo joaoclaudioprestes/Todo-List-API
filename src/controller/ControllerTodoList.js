@@ -1,4 +1,4 @@
-const tasks = require("../model/db");
+const connectToDatabase = require("../model/createTask");
 
 class ControllerTodoList {
   async create(req, res) {
@@ -9,14 +9,18 @@ class ControllerTodoList {
         .json({ message: "Preencha corretamente todos os campos!" });
     }
 
-    tasks.push({ title, description });
-    console.log(tasks);
-    return res.status(201).json({ message: "Tarefa criada com sucesso!" });
+    try {
+      const responseDatabase = await createTask(title, description);
+      res.status(201).json({ message: responseDatabase });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-  async read(req, res) {
-    return res.status(200).json(tasks);
-  }
+
+  async read(req, res) {}
+
   async update(req, res) {}
+
   async delete(req, res) {}
 }
 
