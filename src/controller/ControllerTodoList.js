@@ -1,6 +1,6 @@
-import { tasks } from "../model/db";
+const tasks = require("../model/db");
 
-class TodoListController {
+class ControllerTodoList {
   async create(req, res) {
     const { title, description } = req.body;
     if (!title || !description) {
@@ -20,4 +20,4 @@ class TodoListController {
   async delete(req, res) {}
 }
 
-export default TodoListController;
+module.exports = new ControllerTodoList();

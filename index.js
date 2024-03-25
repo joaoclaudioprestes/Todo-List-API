@@ -1,10 +1,10 @@
-import express, { json } from "express";
-import routes from "./src/routes.js";
+const express = require("express");
+const routes = require("./src/routes.js");
+
 const server = express();
 const PORT = 3000;
 
-server.use(json());
-
+server.use(express.json());
 server.use(routes);
 
 server.listen(PORT, () => {

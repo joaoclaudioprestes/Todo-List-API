@@ -1,9 +1,8 @@
-import { Router } from "express";
-
-
+const Router = require("express").Router;
+const ControllerTodoList = require("./controller/ControllerTodoList");
 const routes = Router();
 
-routes.get("/", );
-routes.post("/", );
+routes.get("/", ControllerTodoList.read);
+routes.post("/", ControllerTodoList.create);
 
-export default routes;
+module.exports = routes;
