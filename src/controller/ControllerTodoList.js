@@ -1,8 +1,14 @@
-const connectToDatabase = require("../model/createTask");
+const e = require("express");
+const createTask = require("../model/createTask");
+const deleteTask = require("../model/deleteTask");
+const searchTask = require("../model/searchTask");
+const updateTask = require("../model/updateTask");
 
 class ControllerTodoList {
   async create(req, res) {
     const { title, description } = req.body;
+
+    // Validação de entrada
     if (!title || !description) {
       return res
         .status(400)
@@ -11,17 +17,50 @@ class ControllerTodoList {
 
     try {
       const responseDatabase = await createTask(title, description);
-      res.status(201).json({ message: responseDatabase });
+      return res.status(201).json({ message: responseDatabase });
     } catch (error) {
-      res.status(500).json({ message: error.message });
+      return res
+        .status(500)
+        .json({ message: "Erro ao criar tarefa: " + error.message });
     }
   }
 
-  async read(req, res) {}
+  async read(req, res) {
+    const { id } = req.body;
+    const task = await searchTask(id);
 
-  async update(req, res) {}
+    if (!task) {
+      return res.status(404).json({ message: "Tarefa não encontrada!" });
+    } else {
+      return res.status(200).json(task);
+    }
+  }
 
-  async delete(req, res) {}
+  async update(req, res) {
+    const { id } = req.body;
+
+    try {
+      const responseDatabase = await updateTask(id);
+      return res.status(200).json({ message: responseDatabase });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao atualizar tarefa: " + error.message });
+    }
+  }
+
+  async delete(req, res) {
+    const { id } = req.body;
+
+    try {
+      const responseDatabase = await deleteTask(id);
+      return res.status(200).json({ message: responseDatabase });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ message: "Erro ao excluir tarefa: " + error.message });
+    }
+  }
 }
 
 module.exports = new ControllerTodoList();
